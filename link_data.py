@@ -1,11 +1,11 @@
 import sqlite3
 from googleapiclient.discovery import build
 from datetime import datetime, timezone
+import re
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
 
 # --- 設定 ---
 YOUTUBE_API_key = os.getenv("YOUTUBE_API_key")
@@ -30,7 +30,7 @@ def get_video_list():
         
         # --- 【重要】動画の「実際の開始時間」を詳しく取得する ---
         video_details = youtube.videos().list(
-            part="liveStreamingDetails,snippet",
+            part="liveStreamingDetails,snippet,contentDetails",
             id=vid
         ).execute()
         
@@ -38,11 +38,37 @@ def get_video_list():
         # 配信中・アーカイブなら actualStartTime、動画投稿なら publishedAt を使う
         live_details = details.get('liveStreamingDetails', {})
         start_time = live_details.get('actualStartTime', details['snippet']['publishedAt'])
-        
+        iso_duration = details['contentDetails']['duration']
+
+        def iso8601_to_seconds(duration):
+            if not duration:
+                return 0
+
+            # P0D だけのケース
+            if duration == 'P0D':
+                return 0
+
+            pattern = pattern = r'P(?:(\d+)D)?T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?'
+            match = re.match(pattern, duration)
+            
+            if not match:
+                print("マッチ失敗:", duration)
+                return 0
+
+            days = int(match.group(1)) if match.group(1) else 0
+            hours = int(match.group(2)) if match.group(2) else 0
+            minutes = int(match.group(3)) if match.group(3) else 0
+            seconds = int(match.group(4)) if match.group(4) else 0
+
+            return days*86400 + hours*3600 + minutes*60 + seconds
+
+        duration_seconds = iso8601_to_seconds(iso_duration)
+
         videos.append({
             'title': item['snippet']['title'],
             'video_id': vid,
-            'start_time': start_time 
+            'start_time': start_time,
+            'duration_seconds': duration_seconds
         })
     return videos
 
@@ -70,8 +96,11 @@ def link_matches_to_videos():
             
             print(f"  - 動画: {video['title'][:15]}... | 差: {time_diff/3600:.1f}時間")
 
+            # 動画の長さ（秒）をAPIから取ってきたと仮定
+            v_duration = video.get('duration_seconds', 0)
+
             # 配信開始後（プラス）かつ 12時間以内なら紐付け
-            if 0 <= time_diff <= 43200: 
+            if 0 <= time_diff <= v_duration : 
                 start_seconds = int(time_diff)
                 v_url = f"https://www.youtube.com/watch?v={video['video_id']}&t={start_seconds}s"
                 
