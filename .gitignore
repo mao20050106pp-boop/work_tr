@@ -1,0 +1,7 @@
+.idea/
+.env
+*.db
+__pycache__/
+.vscode/
+practice/
+worktest.txt
