@@ -14,7 +14,7 @@ YouTube API から取得した配信アーカイブを紐付けて管理・分�
 
 ### データ取得
 - Riot API を使用して試合履歴を取得
-- - YouTube Data API を使用して配信アーカイブを取得
+ - YouTube Data API を使用して配信アーカイブを取得
 
 ### データ保存
 以下の情報を SQLite に保存しています。
