@@ -43,6 +43,7 @@ YouTube API から取得した配信アーカイブを紐付けて管理・分�
 - SQLite
 - Riot Games API
 - YouTube Data API
+- python-dotenv
 
 ---
 
