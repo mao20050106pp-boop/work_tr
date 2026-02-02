@@ -1,0 +1,12 @@
+.idea/
+.env
+*.db
+__pycache__/
+.vscode/
+practice/
+worktest.txt
+conduct1/add_valo_table.py
+conduct1/database.py
+conduct1/test_valo.py
+conduct1/updata_all_records_v2.py
+conduct1/update_valo_records

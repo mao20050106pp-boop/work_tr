@@ -1,0 +1,8 @@
+.env
+.idea/
+*.db
+add_valo_table.py
+database.py
+test_valo.py
+updata_all_records_v2.py
+update_valo_records
