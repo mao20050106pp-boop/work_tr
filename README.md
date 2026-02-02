@@ -1,7 +1,7 @@
 # LoL Stream Archive Analyzer
 
 ## 概要
-LoL（League of Legends）配信者の試合データと配信アーカイブを自動で紐付ける分析ツールです。 Riot APIから取得した戦績データと、YouTube/Twitch APIから取得したアーカイブ情報を照合し、「あの配信のあの試合」をすぐに特定できます。
+###LoL（League of Legends）配信者の試合データと配信アーカイブを自動で紐付ける分析ツールです。 Riot APIから取得した戦績データと、YouTube/Twitch APIから取得したアーカイブ情報を照合し、「あの配信のあの試合」をすぐに特定できます。
 ---
 
 ## 主な機能
