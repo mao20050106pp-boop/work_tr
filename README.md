@@ -1,59 +1,47 @@
 # LoL Stream Archive Analyzer
 
 ## 概要
-LoL（League of Legends）配信者が過去に行った試合を、
-Riot API から取得した試合履歴と
-YouTube API から取得した配信アーカイブを紐付けて管理・分析するWebアプリです。
-
-過去の配信内で「どのチャンピオンを使っていたか」を
-すぐに確認・統計表示し、該当する配信アーカイブを視聴できます。
-
+LoL（League of Legends）配信者の試合データと配信アーカイブを自動で紐付ける分析ツールです。 Riot APIから取得した戦績データと、YouTube/Twitch APIから取得したアーカイブ情報を照合し、「あの配信のあの試合」をすぐに特定できます。
 ---
 
 ## 主な機能
 
-### データ取得
-- Riot API を使用して試合履歴を取得
-  - YouTube Data API を使用して配信アーカイブを取得
+### マルチプラットフォーム対応
+- Riot API: 試合詳細データ（チャンピオン、KDA、勝敗）を取得
+- YouTube Data API: 配信開始時刻を取得し、試合時間と自動照合
+- Twitch API (開発中): 配信ステータスの取得とアーカイブ連携
 
-### データ保存
-以下の情報を SQLite に保存しています。
-- 試合ID
-- 試合日時
-- 使用チャンピオン
-- 勝敗
-- K/D/A
-- 配信アーカイブURL
-
-### 分析機能
-- チャンピオン使用回数ランキング
-- チャンピオン別勝率
-- 平均KDAの算出
+### 分析・統計
+- チャンピオン別の使用回数・勝率・平均KDAの自動算出
+- 配信アーカイブURLへのダイレクトリンク生成
 
 ### Web画面表示（Flask）
-- 試合一覧表示
-- チャンピオン別統計表示
-- 配信アーカイブへのリンク表示
+- 直感的に戦績を確認できるダッシュボード
+- チャンピオンアイコンの動的表示（Data Dragon連携）
 
 ---
 
 ## 使用技術
-- Python
-- Flask
-- SQLite
-- Riot Games API
-- YouTube Data API
-- python-dotenv
+- Language: Python 3.x
+- Framework: Flask
+- Database: SQLite3 
+- APIs:
+  - Riot Games API
+  - YouTube Data API v3
+  - Twitch API (Helix)
+- Libraries:
+  - requests: HTTP通信
+  - google-api-python-client: YouTube連携
+  - python-dotenv: 環境変数管理
 
 ---
 
 ## 工夫した点
-- 配信動画の `actualStartTime` を優先的に使用し、
-  配信開始時刻と試合開始時刻のズレを考慮して紐付けを行っています
-- 配信開始後から一定時間内の試合のみを対象とすることで、
-  誤った動画紐付けを防いでいます
-- データ取得・分析・表示を役割ごとに分離して実装しています
+- 高精度な紐付けロジック: 配信の actualStartTime（実際の開始時刻）を基準に、試合開始時刻との差分を計算。配信外の試合が混入しないよう判定ロジックを最適化しています。
 
+- モジュール化: データベース操作、API通信、Web表示を分離し、メンテナンス性を向上させました。
+
+- 最新版への追従: LoLのパッチ更新に合わせて最新のチャンピオン画像を取得できるよう、Data Dragon APIのバージョン管理を考慮しています。
 ---
 
 
@@ -65,6 +53,7 @@ YouTube API から取得した配信アーカイブを紐付けて管理・分�
 
 ---
 
+## 実行方法（簡易）
 1. 必要なライブラリをインストール
 ターミナルで以下のコマンドを実行してください。
 ```bash
@@ -84,4 +73,3 @@ TWITCH_CLIENT_SECRET=xxxx
 ```Bash
 python app.py
 ```
-
