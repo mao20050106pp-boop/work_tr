@@ -1,4 +1,0 @@
-https://developer.riotgames.com/
-
-python update_all_records_v2.py
-python app.py
