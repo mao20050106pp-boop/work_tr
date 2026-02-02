@@ -73,19 +73,15 @@ pip install flask requests google-api-python-client python-dotenv
 
 2. 環境変数の準備
 ルートディレクトリに .env ファイルを作成し、各種APIキーを設定してください。
-
+```Plaintext
 RIOT_API_KEY=RGAPI-xxxx-xxxx
 YOUTUBE_API_KEY=AIza-xxxx-xxxx
 TWITCH_CLIENT_ID=xxxx
 TWITCH_CLIENT_SECRET=xxxx
-
+```
 
 3. アプリケーションの起動
 ```Bash
 python app.py
 ```
 
----
-
-##補足
-本プロジェクトは学習目的で作成しています。AIを活用したコード生成を取り入れつつ、デバッグやロジックのカスタマイズはすべて自身で行い、各APIの仕様やデータ構造を深く理解した上で実装しています。
